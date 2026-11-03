@@ -47,33 +47,20 @@
     const ctx = canvas.getContext('2d');
     const image = ctx.createImageData(width, height), data = image.data;
 
-    // Detailed realistic palettes and patterns
-    const palettes = {
-      mercury: { base: [120, 115, 110], high: [170, 165, 160], dark: [80, 75, 70] },
-      venus: { base: [215, 160, 95], high: [240, 205, 140], dark: [160, 105, 50] },
-      earth: { ocean: [20, 70, 150], land: [50, 140, 60], desert: [190, 160, 100], ice: [240, 240, 250], cloud: [255, 255, 255] },
-      mars: { base: [180, 85, 45], high: [215, 120, 65], dark: [130, 50, 25], ice: [240, 240, 245] },
-      jupiter: { bands: [[180, 140, 105], [220, 200, 170], [135, 95, 70], [200, 170, 130], [110, 70, 45]] },
-      saturn: { bands: [[210, 190, 145], [235, 220, 185], [175, 150, 110], [220, 200, 160]] },
-      uranus: { base: [140, 210, 225], high: [180, 235, 245], dark: [90, 150, 175] },
-      neptune: { base: [40, 90, 210], high: [80, 140, 245], dark: [20, 50, 140], storm: [100, 180, 255] }
-    };
+    function getNoise(x, y, scale, octaves = 3) {
+      let val = 0, freq = scale, amp = 1;
+      for (let i = 0; i < octaves; i++) {
+        val += Math.sin(x * freq) * Math.cos(y * freq) * amp;
+        freq *= 2; amp *= 0.5;
+      }
+      return val;
+    }
 
-        // Use multiple layers of noise for organic texture
-        function getNoise(x, y, scale, octaves = 3) {
-          let val = 0, freq = scale, amp = 1;
-          for (let i = 0; i < octaves; i++) {
-            val += Math.sin(x * freq) * Math.cos(y * freq) * amp;
-            freq *= 2; amp *= 0.5;
-          }
-          return val;
-        }
-
-        // Inside the loop:
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
         const n = getNoise(x * 0.02, y * 0.02, 0.5);
-        const detail = getNoise(x * 0.1, y * 0.1, 1.0);
         const [r, g, b] = [n * 128 + 128, n * 128 + 128, n * 128 + 128];
-
         data[i] = Math.max(0, Math.min(255, r));
         data[i + 1] = Math.max(0, Math.min(255, g));
         data[i + 2] = Math.max(0, Math.min(255, b));
@@ -153,7 +140,6 @@
         if (state.cancelled || planetRenderStates.get(canvas) !== state || !canvas.isConnected) return;
         const delta = Math.min((time - (previous || time)) / 1000, .05);
         previous = time;
-        // Rotation only on their own axis (no revolution)
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) angle += delta * .24;
         const yaw = angle + dragYaw, cosYaw = Math.cos(yaw), sinYaw = Math.sin(yaw);
         const cosPitch = Math.cos(pitch), sinPitch = Math.sin(pitch);
