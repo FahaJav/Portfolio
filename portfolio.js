@@ -13,8 +13,8 @@
     },
     projects: {
       planet: 'jupiter', label: '02 — MISSIONS / JUPITER', title: 'Selected Missions',
-      body: 'Explore my public repositories and open-source projects on GitHub.',
-      extra: '<ul class="detail-list"><li><strong>Portfolio</strong><span>Personal command center and interactive portfolio showcasing space-themed design and 3D canvas rendering.</span><span><a href="https://github.com/FahaJav/Portfolio" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav/Portfolio</a></span></li><li><strong>Explore All Repositories</strong><span>View all my open-source projects, tools, and code contributions on GitHub.</span><span><a href="https://github.com/FahaJav?tab=repositories" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav</a></span></li></ul>'
+      body: 'Explore my public GitHub repositories and open-source projects.',
+      extra: '<ul class="detail-list"><li><strong>Rift — Manga Reader</strong><span>A manga reader application built with web technologies.</span><span><a href="https://github.com/FahaJav/Rift---Manga-Reader" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav/Rift---Manga-Reader</a></span></li><li><strong>To-Do-List-Using-Python</strong><span>A clean and efficient task management application built in Python.</span><span><a href="https://github.com/FahaJav/To-Do-List-Using-Python" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav/To-Do-List-Using-Python</a></span></li></ul>'
     },
     skills: {
       planet: 'mars', label: '03 — FLIGHT SYSTEMS / MARS', title: 'Flight Systems & Tech Stack',
@@ -56,13 +56,9 @@
       return val;
     }
 
-    // Unique distinct color palettes and procedural patterns for each planet
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const i = (y * width + x) * 4;
-        const nx = x / width * Math.PI * 2;
-        const ny = y / height * Math.PI - Math.PI / 2;
-
         let r = 128, g = 128, b = 128;
 
         if (name === 'mercury') {

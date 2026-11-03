@@ -31,12 +31,10 @@
     font-family: 'Rajdhani', sans-serif;
   }
 
-  /* Audio / FX toggles & Vignette */
+  /* Clean Vignette (scanlines and horizontal lines removed) */
   .vignette {
     position: fixed; inset: 0; pointer-events: none; z-index: 100;
-    background: radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,0.85) 100%),
-                linear-gradient(rgba(18,16,16,0) 50%, rgba(0, 0, 0, 0.25) 50%);
-    background-size: 100% 100%, 100% 4px;
+    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.65) 100%);
   }
 
   .universe {
@@ -60,12 +58,6 @@
     to { transform: translate(-50px, -50px); }
   }
 
-  /* Solar System Layout */
-  .universe {
-    position: fixed; inset: 0; overflow: hidden;
-    background: radial-gradient(circle at center, #0a1128 0%, #030712 100%);
-  }
-
   /* Fixed Sun Position */
   .sun {
     position: absolute; z-index: 2; left: 0%; top: 50%;
@@ -75,15 +67,25 @@
     box-shadow: 0 0 50px 15px rgba(255, 140, 0, 0.5), 0 0 150px 50px rgba(255, 60, 0, 0.25);
   }
 
-  /* Fixed Random Planet Positions */
-  .orbit.mercury { left: 15%; top: 20%; }
-  .orbit.venus { left: 25%; top: 70%; }
-  .orbit.earth { left: 35%; top: 30%; }
-  .orbit.mars { left: 45%; top: 60%; }
-  .orbit.jupiter { left: 55%; top: 40%; }
-  .orbit.saturn { left: 65%; top: 25%; }
-  .orbit.uranus { left: 75%; top: 75%; }
-  .orbit.neptune { left: 85%; top: 50%; }
+  /* Revolution Path Rings around Sun */
+  .orbit-ring {
+    position: absolute; left: 0%; top: 50%;
+    border: 1px dashed rgba(0, 240, 255, 0.18);
+    border-radius: 50%;
+    transform: translate(-30%, -50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Correct Solar System Order from Sun outwards */
+  .orbit.mercury { left: 16%; top: 32%; z-index: 3; }
+  .orbit.venus   { left: 24%; top: 24%; z-index: 3; }
+  .orbit.earth   { left: 34%; top: 40%; z-index: 3; }
+  .orbit.mars    { left: 44%; top: 28%; z-index: 3; }
+  .orbit.jupiter { left: 56%; top: 36%; z-index: 3; }
+  .orbit.saturn  { left: 68%; top: 26%; z-index: 3; }
+  .orbit.uranus  { left: 80%; top: 44%; z-index: 3; }
+  .orbit.neptune { left: 90%; top: 30%; z-index: 3; }
 
   .orbit {
     position: absolute;
@@ -285,17 +287,6 @@
   }
   .detail-list span { font-size: 14px; color: var(--text-muted); }
 
-  .sector-empty {
-    display: flex; align-items: center; gap: 12px; background: rgba(255, 183, 0, 0.05);
-    border: 1px solid rgba(255, 183, 0, 0.2); padding: 16px; border-left: 3px solid var(--hud-amber);
-    font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--hud-amber);
-  }
-  .empty-dot {
-    width: 8px; height: 8px; background: var(--hud-amber); border-radius: 50%;
-    box-shadow: 0 0 8px var(--hud-amber); animation: pulseDot 1.5s infinite;
-  }
-  @keyframes pulseDot { 50% { opacity: 0.3; } }
-
   /* HUD Footer & Controls Legend */
   .hud-footer {
     display: flex; justify-content: space-between; align-items: center;
@@ -317,6 +308,7 @@
     width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
     box-shadow: 0 0 10px #22c55e; animation: pulseDot 2s infinite;
   }
+  @keyframes pulseDot { 50% { opacity: 0.3; } }
 
   /* Tooltip */
   .planet-tooltip {
@@ -341,14 +333,27 @@
 
 <div class="universe" id="universe" aria-label="Top-down solar system portfolio">
   <div class="starfield"></div>
-  <div class="orbit mercury" style="--diameter: 280px; --speed: 40s;"><div class="track"><button class="planet-button" data-planet="mercury" data-section="contact" aria-label="Mercury — open Open Comms"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Mercury</span></button></div></div>
-  <div class="orbit venus" style="--diameter: 440px; --speed: 65s;"><div class="track"><button class="planet-button" data-planet="venus" data-section="about" aria-label="Venus — open Crew Profile"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Venus</span></button></div></div>
-  <div class="orbit earth" style="--diameter: 620px; --speed: 90s;"><div class="track"><button class="planet-button" data-planet="earth" data-section="about" aria-label="Earth — open Crew Profile"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Earth</span></button></div></div>
-  <div class="orbit mars" style="--diameter: 820px; --speed: 120s;"><div class="track"><button class="planet-button" data-planet="mars" data-section="skills" aria-label="Mars — open Flight Systems"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Mars</span></button></div></div>
-  <div class="orbit jupiter" style="--diameter: 1080px; --speed: 160s;"><div class="track"><button class="planet-button" data-planet="jupiter" data-section="projects" aria-label="Jupiter — open Projects"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Jupiter</span></button></div></div>
-  <div class="orbit saturn" style="--diameter: 1360px; --speed: 210s;"><div class="track"><button class="planet-button" data-planet="saturn" data-section="projects" aria-label="Saturn — open Projects"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Saturn</span></button></div></div>
-  <div class="orbit uranus" style="--diameter: 1640px; --speed: 270s;"><div class="track"><button class="planet-button" data-planet="uranus" data-section="skills" aria-label="Uranus — open Flight Systems"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Uranus</span></button></div></div>
-  <div class="orbit neptune" style="--diameter: 1940px; --speed: 340s;"><div class="track"><button class="planet-button" data-planet="neptune" data-section="contact" aria-label="Neptune — open Open Comms"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Neptune</span></button></div></div>
+
+  <!-- Sun Revolution Path Rings (Concentric circles representing orbits, NO animation) -->
+  <div class="orbit-ring" style="width: 320px; height: 320px;"></div>
+  <div class="orbit-ring" style="width: 500px; height: 500px;"></div>
+  <div class="orbit-ring" style="width: 680px; height: 680px;"></div>
+  <div class="orbit-ring" style="width: 880px; height: 880px;"></div>
+  <div class="orbit-ring" style="width: 1100px; height: 1100px;"></div>
+  <div class="orbit-ring" style="width: 1360px; height: 1360px;"></div>
+  <div class="orbit-ring" style="width: 1620px; height: 1620px;"></div>
+  <div class="orbit-ring" style="width: 1900px; height: 1900px;"></div>
+
+  <!-- Correct Solar System Order from Sun outwards -->
+  <div class="orbit mercury" style="--diameter: 320px;"><div class="track"><button class="planet-button" data-planet="mercury" data-section="contact" aria-label="Mercury — open Open Comms"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Mercury</span></button></div></div>
+  <div class="orbit venus" style="--diameter: 500px;"><div class="track"><button class="planet-button" data-planet="venus" data-section="about" aria-label="Venus — open Crew Profile"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Venus</span></button></div></div>
+  <div class="orbit earth" style="--diameter: 680px;"><div class="track"><button class="planet-button" data-planet="earth" data-section="about" aria-label="Earth — open Crew Profile"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Earth</span></button></div></div>
+  <div class="orbit mars" style="--diameter: 880px;"><div class="track"><button class="planet-button" data-planet="mars" data-section="skills" aria-label="Mars — open Flight Systems"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Mars</span></button></div></div>
+  <div class="orbit jupiter" style="--diameter: 1100px;"><div class="track"><button class="planet-button" data-planet="jupiter" data-section="projects" aria-label="Jupiter — open Projects"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Jupiter</span></button></div></div>
+  <div class="orbit saturn" style="--diameter: 1360px;"><div class="track"><button class="planet-button" data-planet="saturn" data-section="projects" aria-label="Saturn — open Projects"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Saturn</span></button></div></div>
+  <div class="orbit uranus" style="--diameter: 1620px;"><div class="track"><button class="planet-button" data-planet="uranus" data-section="skills" aria-label="Uranus — open Flight Systems"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Uranus</span></button></div></div>
+  <div class="orbit neptune" style="--diameter: 1900px;"><div class="track"><button class="planet-button" data-planet="neptune" data-section="contact" aria-label="Neptune — open Open Comms"><span class="planet-body"><canvas class="orbit-planet" aria-hidden="true"></canvas></span><span class="planet-name">Neptune</span></button></div></div>
+
   <button class="sun" id="sun" aria-label="Sun — return to command center"><span class="sun-label">The Sun</span></button>
 </div>
 
