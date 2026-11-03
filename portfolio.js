@@ -9,22 +9,22 @@
     about: {
       planet: 'earth', label: '01 — CREW PROFILE / EARTH', title: 'Crew Profile',
       body: 'I am Fahad Javed, a software engineer and developer specializing in Python, C, Rust, JavaScript, and 3D modeling with Blender. I build robust systems, interactive web applications, and creative tools.',
-      extra: '<ul class="detail-list"><li><strong>Background</strong><span>Passionate about low-level programming, modern web development, and bridging code with immersive 3D design.</span></li><li><strong>Core Stack</strong><span>Python, Rust, C, JavaScript, HTML/CSS, Blender</span></li></ul>'
+      extra: '<ul class="detail-list"><li><strong>Profile Overview</strong><span>I am interested in game development with advanced knowledge of 3D modeling, animation, and working with plugins/extensions.</span></li><li><strong>Core Stack</strong><span>Python, Rust, C, JavaScript, HTML/CSS, Blender</span></li></ul>'
     },
     projects: {
       planet: 'jupiter', label: '02 — MISSIONS / JUPITER', title: 'Selected Missions',
-      body: 'Explore my featured software projects, game systems, and utility tools.',
-      extra: '<ul class="detail-list"><li><strong>Sudoku Game (CustomTkinter)</strong><span>An interactive Python puzzle game featuring real-time input validation (green for correct, red for error), clean custom UI themes, and elapsed-time tracking.</span></li><li><strong>FreeLLMApi</strong><span>An API integration service exploring seamless language model interactions and backend routing.</span></li><li><strong>Earth Rotation Command Center</strong><span>An immersive, orbital-mechanics-inspired interactive portfolio showcasing responsive space-themed design and 3D canvas textures.</span></li></ul>'
+      body: 'Explore my public repositories and open-source projects on GitHub.',
+      extra: '<ul class="detail-list"><li><strong>Portfolio</strong><span>Personal command center and interactive portfolio showcasing space-themed design and 3D canvas rendering.</span><span><a href="https://github.com/FahaJav/Portfolio" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav/Portfolio</a></span></li><li><strong>Explore All Repositories</strong><span>View all my open-source projects, tools, and code contributions on GitHub.</span><span><a href="https://github.com/FahaJav?tab=repositories" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav</a></span></li></ul>'
     },
     skills: {
       planet: 'mars', label: '03 — FLIGHT SYSTEMS / MARS', title: 'Flight Systems & Tech Stack',
       body: 'Core engineering capabilities and creative tools utilized in missions.',
-      extra: '<ul class="detail-list"><li><strong>Python & Rust</strong><span>Scripting, backend logic, performance-critical systems, and desktop apps with CustomTkinter.</span></li><li><strong>C & Systems</strong><span>Low-level programming, memory management, and foundational computer science applications.</span></li><li><strong>JavaScript & Web</strong><span>Interactive client-side experiences, HTML5 canvas rendering, dynamic UI architectures, and DOM manipulation.</span></li><li><strong>Blender (3D Modeling)</strong><span>Creating assets, hard-surface modeling, and visual simulations.</span></li></ul>'
+      extra: '<ul class="detail-list"><li><strong>Python & Rust</strong><span>Scripting, backend logic, performance-critical systems, and desktop apps with CustomTkinter.</span></li><li><strong>C & Systems</strong><span>Low-level programming, memory management, and foundational computer science applications.</span></li><li><strong>JavaScript & Web</strong><span>Interactive client-side experiences, HTML5 canvas rendering, dynamic UI architectures, and DOM manipulation.</span></li><li><strong>Blender & Animation</strong><span>Advanced 3D modeling, custom asset animation, rendering pipelines, and plugin/extension integration.</span></li></ul>'
     },
     contact: {
       planet: 'neptune', label: '04 — OPEN COMMS / NEPTUNE', title: 'Open Comms',
-      body: 'Let us connect for collaborations, development projects, or technical discussions.',
-      extra: '<ul class="detail-list"><li><strong>GitHub</strong><span><a href="https://github.com/FahaJav" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav</a></span></li><li><strong>Direct Comms</strong><span>Available for software engineering inquiries, custom Python/Rust development, and creative 3D tech work.</span></li></ul>'
+      body: 'Let us connect for collaborations, game development projects, or technical discussions.',
+      extra: '<ul class="detail-list"><li><strong>Direct Email</strong><span><a href="mailto:fahadjaved786007@gmail.com" style="color: var(--hud-cyan); text-decoration: none;">fahadjaved786007@gmail.com</a></span></li><li><strong>GitHub</strong><span><a href="https://github.com/FahaJav" target="_blank" style="color: var(--hud-cyan); text-decoration: none;">github.com/FahaJav</a></span></li></ul>'
     }
   };
   let selectedSection = null;
@@ -56,11 +56,58 @@
       return val;
     }
 
+    // Unique distinct color palettes and procedural patterns for each planet
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const i = (y * width + x) * 4;
-        const n = getNoise(x * 0.02, y * 0.02, 0.5);
-        const [r, g, b] = [n * 128 + 128, n * 128 + 128, n * 128 + 128];
+        const nx = x / width * Math.PI * 2;
+        const ny = y / height * Math.PI - Math.PI / 2;
+
+        let r = 128, g = 128, b = 128;
+
+        if (name === 'mercury') {
+          const noise = getNoise(x * 0.03, y * 0.03, 0.8, 3);
+          const base = 110 + noise * 45;
+          r = base; g = base - 5; b = base - 10;
+        } else if (name === 'venus') {
+          const noise = getNoise(x * 0.02, y * 0.04, 0.6, 3);
+          r = 210 + noise * 30; g = 160 + noise * 25; b = 90 + noise * 20;
+        } else if (name === 'earth') {
+          const continent = getNoise(x * 0.015, y * 0.015, 1.2, 4);
+          const clouds = getNoise(x * 0.04, y * 0.02, 2.0, 2);
+          if (continent > 0.1) {
+            r = 45; g = 130 + continent * 50; b = 55;
+          } else if (continent > 0.02) {
+            r = 190; g = 165; b = 100;
+          } else {
+            r = 20; g = 70; b = 160;
+          }
+          if (clouds > 0.35) {
+            r = Math.min(255, r + 120);
+            g = Math.min(255, g + 120);
+            b = Math.min(255, b + 120);
+          }
+        } else if (name === 'mars') {
+          const noise = getNoise(x * 0.025, y * 0.025, 1.0, 3);
+          r = 175 + noise * 40; g = 80 + noise * 30; b = 40 + noise * 20;
+          if (Math.abs(y) > height * 0.4) { r = 240; g = 240; b = 245; }
+        } else if (name === 'jupiter') {
+          const band = Math.sin(y * 0.08 + getNoise(x * 0.02, y * 0.02, 0.5) * 2);
+          r = 180 + band * 45; g = 135 + band * 35; b = 95 + band * 25;
+        } else if (name === 'saturn') {
+          const band = Math.sin(y * 0.06 + getNoise(x * 0.015, y * 0.015, 0.4) * 1.5);
+          r = 210 + band * 30; g = 190 + band * 25; b = 140 + band * 20;
+        } else if (name === 'uranus') {
+          const noise = getNoise(x * 0.02, y * 0.02, 0.5);
+          r = 135 + noise * 25; g = 205 + noise * 20; b = 220 + noise * 20;
+        } else if (name === 'neptune') {
+          const noise = getNoise(x * 0.025, y * 0.025, 0.8, 3);
+          r = 45 + noise * 25; g = 90 + noise * 35; b = 210 + noise * 30;
+        } else {
+          const noise = getNoise(x * 0.02, y * 0.02, 0.5);
+          r = noise * 128 + 128; g = noise * 128 + 128; b = noise * 128 + 128;
+        }
+
         data[i] = Math.max(0, Math.min(255, r));
         data[i + 1] = Math.max(0, Math.min(255, g));
         data[i + 2] = Math.max(0, Math.min(255, b));
