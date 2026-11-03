@@ -72,6 +72,7 @@
         // Inside the loop:
         const n = getNoise(x * 0.02, y * 0.02, 0.5);
         const detail = getNoise(x * 0.1, y * 0.1, 1.0);
+        const [r, g, b] = [n * 128 + 128, n * 128 + 128, n * 128 + 128];
 
         data[i] = Math.max(0, Math.min(255, r));
         data[i + 1] = Math.max(0, Math.min(255, g));
